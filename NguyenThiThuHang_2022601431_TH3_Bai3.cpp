@@ -2,18 +2,9 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void getKeyMatrix(string key, int keyMatrix[][50], int n){
-    int k = 0;
-    for (int i = 0; i < n; i++){
-        for(int j =0; j < n; j++){
-                //ma Ascii
-            keyMatrix[i][j] = key[k] % 65;
-            k++;
-        }
-    }
-}
+int keyMatrix[50][50];
 
-void encrypt(int cipherMatrix[][1], int keyMatrix[][50], int messageVector[][1], int n){
+void encrypt(int cipherMatrix[][1], int messageVector[][1], int n){
     int x, i, j;
     //i: hang ma tran key
     for(i = 0; i < n; i++){
@@ -22,34 +13,35 @@ void encrypt(int cipherMatrix[][1], int keyMatrix[][50], int messageVector[][1],
             cipherMatrix[i][j] = 0;
     //x: hang ma tran ket qua cipher
             for(x = 0; x < n; x++){
-                cipherMatrix[i][j] += keyMatrix[i][x] * messageVector[x][j];
+                cipherMatrix[i][j] += keyMatrix[x][i] * messageVector[j][x];
             }
             cipherMatrix[i][j] = cipherMatrix[i][j] % 26;
         }
     }
 }
 
-string HillCipher(string message, string key, int n){
-    int keyMatrix[50][50];
-    getKeyMatrix(key, keyMatrix, n);
+string HillCipher(string message, int n){
     int messageVector[n][1];
     for(int i = 0; i < n; i++){
-        messageVector[i][0] = (message[i]) % 65;
+        messageVector[i][0] = (message[i]) - 'A';
     }
     int cipherMatrix[n][1];
-    encrypt(cipherMatrix, keyMatrix, messageVector, n);
+    encrypt(cipherMatrix, messageVector, n);
     string CipherText;
 
     for(int i = 0; i < n; i++){
-        CipherText += cipherMatrix[i][0] + 65;
+        CipherText += cipherMatrix[i][0] + 'A';
     }
     return CipherText;
 }
 
 int main(){
-    string key, msg1, msg2;
-    cout << "Moi ban nhap key lan luot gom cac so a, b, c, d viet lien.";
-    cin >> key;
+    string msg1, msg2;
+    cout << "Moi ban nhap key lan luot gom cac so a, b, c, d cach nhau boi dau cach.";
+    for(int i = 0; i < 4; i++){
+    	int a; cin >> a;
+    	keyMatrix[i/2][i%2] = a;
+	}
     cout << "Moi ban nhap xau ky tu 1: ";
     cin >> msg1;
     cout << "Moi ban nhap xau ky tu 2: ";
@@ -62,10 +54,9 @@ int main(){
     	for(int i = k *n; i < (k+1) * n; i++){
     		msg += msg1[i];
 		}
-		cipher += HillCipher(msg, key, n);
+		cipher += HillCipher(msg, n);
 		k++;
 	} 
-    cout << cipher;
     if(cipher == msg2){
     	cout << "Ban da nhap dung: ";
 	}else{

@@ -13,7 +13,7 @@ void encrypt(int cipherMatrix[][1], int messageVector[][1], int n){
             cipherMatrix[i][j] = 0;
     //x: hang ma tran ket qua cipher
             for(x = 0; x < n; x++){
-                cipherMatrix[i][j] += keyMatrix[i][x] * messageVector[x][j];
+                cipherMatrix[i][j] += keyMatrix[x][i] * messageVector[j][x];
             }
             cipherMatrix[i][j] = cipherMatrix[i][j] % 26;
         }
@@ -57,7 +57,6 @@ int main(){
 		cipher += HillCipher(msg, n);
 		k++;
 	} 
-    cout << cipher;
     if(cipher == msg2){
     	cout << "Ban da nhap dung: ";
 	}else{
